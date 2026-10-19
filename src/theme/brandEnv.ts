@@ -1,3 +1,8 @@
+import { env } from '@/config/env';
+import {
+  derivePrimaryScale,
+  isValidBrandHex,
+} from './deriveBrandPalette';
 import type { ThemeMode } from './types';
 
 export interface ModeColors {
@@ -11,30 +16,36 @@ export interface ModeColors {
   surface: string;
 }
 
+const DEFAULT_BRAND_PRIMARY = '#059669';
+
 const DEFAULT_COLORS: Record<ThemeMode, ModeColors> = {
   light: {
-    primary: '#4338CA',
-    primaryDark: '#3730A3',
-    primaryLight: '#6366F1',
+    primary: DEFAULT_BRAND_PRIMARY,
+    primaryDark: '#047857',
+    primaryLight: '#10B981',
     secondary: '#475569',
-    accent: '#7C3AED',
+    accent: '#D946EF',
     foreground: '#0F172A',
     background: '#F8FAFC',
     surface: '#FFFFFF',
   },
   dark: {
-    primary: '#818CF8',
-    primaryDark: '#6366F1',
-    primaryLight: '#A5B4FC',
+    primary: '#34D399',
+    primaryDark: '#10B981',
+    primaryLight: '#6EE7B7',
     secondary: '#94A3B8',
-    accent: '#A78BFA',
+    accent: '#E879F9',
     foreground: '#F8FAFC',
     background: '#0F172A',
     surface: '#1E293B',
   },
 };
 
-function readEnvColor(mode: ThemeMode, token: keyof ModeColors): string {
+function readEnvColor(
+  mode: ThemeMode,
+  token: keyof ModeColors,
+  fallback?: string,
+): string {
   const envKey = `NEXT_PUBLIC_THEME_${mode.toUpperCase()}_${token
     .replace(/([A-Z])/g, '_$1')
     .toUpperCase()}`;
@@ -44,35 +55,49 @@ function readEnvColor(mode: ThemeMode, token: keyof ModeColors): string {
     return value;
   }
 
+  if (fallback) {
+    return fallback;
+  }
+
   return DEFAULT_COLORS[mode][token];
 }
 
-export function getBrandColorsFromEnv(): Record<ThemeMode, ModeColors> {
+function resolveDerivedDefaults(): Record<ThemeMode, ModeColors> {
+  const brandPrimary = isValidBrandHex(env.brandPrimary)
+    ? env.brandPrimary
+    : DEFAULT_BRAND_PRIMARY;
+  const derived = derivePrimaryScale(brandPrimary);
+
+  const buildMode = (mode: ThemeMode): ModeColors => {
+    const fromBrand = derived[mode];
+
+    return {
+      primary: readEnvColor(mode, 'primary', fromBrand.primary),
+      primaryDark: readEnvColor(mode, 'primaryDark', fromBrand.primaryDark),
+      primaryLight: readEnvColor(mode, 'primaryLight', fromBrand.primaryLight),
+      secondary: readEnvColor(mode, 'secondary'),
+      accent: readEnvColor(mode, 'accent'),
+      foreground: readEnvColor(mode, 'foreground'),
+      background: readEnvColor(mode, 'background'),
+      surface: readEnvColor(mode, 'surface'),
+    };
+  };
+
   return {
-    light: {
-      primary: readEnvColor('light', 'primary'),
-      primaryDark: readEnvColor('light', 'primaryDark'),
-      primaryLight: readEnvColor('light', 'primaryLight'),
-      secondary: readEnvColor('light', 'secondary'),
-      accent: readEnvColor('light', 'accent'),
-      foreground: readEnvColor('light', 'foreground'),
-      background: readEnvColor('light', 'background'),
-      surface: readEnvColor('light', 'surface'),
-    },
-    dark: {
-      primary: readEnvColor('dark', 'primary'),
-      primaryDark: readEnvColor('dark', 'primaryDark'),
-      primaryLight: readEnvColor('dark', 'primaryLight'),
-      secondary: readEnvColor('dark', 'secondary'),
-      accent: readEnvColor('dark', 'accent'),
-      foreground: readEnvColor('dark', 'foreground'),
-      background: readEnvColor('dark', 'background'),
-      surface: readEnvColor('dark', 'surface'),
-    },
+    light: buildMode('light'),
+    dark: buildMode('dark'),
   };
 }
 
-import { env } from '@/config/env';
+export function getBrandColorsFromEnv(): Record<ThemeMode, ModeColors> {
+  return resolveDerivedDefaults();
+}
+
+export function getBrandPrimaryFromEnv(): string {
+  return isValidBrandHex(env.brandPrimary)
+    ? env.brandPrimary
+    : DEFAULT_BRAND_PRIMARY;
+}
 
 export function getBrandNameFromEnv(): string {
   return env.brandName;

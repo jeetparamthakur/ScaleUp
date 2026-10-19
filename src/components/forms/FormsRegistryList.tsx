@@ -20,13 +20,20 @@ import type {
   FormRegistryListItem,
 } from '@/lib/forms/types';
 
-const MODULE_ORDER: FormModule[] = ['crm', 'email', 'settings', 'website'];
+const MODULE_ORDER: FormModule[] = [
+  'crm',
+  'email',
+  'whatsapp',
+  'settings',
+  'website',
+];
 
 const MODULE_LABELS: Record<FormModule, string> = {
   crm: 'CRM',
   email: 'Email',
   settings: 'Settings',
   website: 'Website',
+  whatsapp: 'WhatsApp',
 };
 
 interface FormsRegistryListProps {
@@ -42,7 +49,7 @@ interface FormsRegistryListProps {
   hideHero?: boolean;
   editActionLabel?: string;
   filterExtendableOnly?: boolean;
-  /** When true, only the six Manage Forms registry entries are shown. */
+  /** When true, only the seven Manage Forms registry entries are shown. */
   manageableOnly?: boolean;
   canEdit?: boolean;
   hideModuleFilters?: boolean;

@@ -35,7 +35,11 @@ export default function FormModuleSelect({
   }
 
   return (
-    <FormControl size="small" className="min-w-[220px]" disabled={disabled || isLoading}>
+    <FormControl
+      size="small"
+      className="min-w-[220px] overflow-visible"
+      disabled={disabled || isLoading}
+    >
       <InputLabel id="form-module-select-label">Select form</InputLabel>
       <Select
         labelId="form-module-select-label"

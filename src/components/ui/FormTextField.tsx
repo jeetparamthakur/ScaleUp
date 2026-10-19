@@ -1,14 +1,12 @@
 'use client';
 
-import InputAdornment from '@mui/material/InputAdornment';
-import TextField from '@mui/material/TextField';
-import type { TextFieldProps } from '@mui/material/TextField';
 import {
   Control,
   Controller,
   FieldPath,
   FieldValues,
 } from 'react-hook-form';
+import Input from './inputs/Input';
 
 interface RhfFormTextFieldProps<T extends FieldValues> {
   name: FieldPath<T>;
@@ -34,6 +32,7 @@ interface ControlledFormTextFieldProps {
   endAdornment?: React.ReactNode;
   error?: boolean;
   helperText?: string;
+  id?: string;
 }
 
 export type FormTextFieldProps<T extends FieldValues = FieldValues> =
@@ -66,24 +65,19 @@ export default function FormTextField<T extends FieldValues>(
         name={name}
         control={control}
         render={({ field, fieldState }) => (
-          <TextField
+          <Input
             {...field}
             id={name}
             label={label}
             type={type}
             autoComplete={autoComplete}
             placeholder={placeholder}
-            fullWidth
             required
             disabled={disabled}
-            error={Boolean(fieldState.error)}
-            helperText={fieldState.error?.message ?? helperText}
-            slotProps={{
-              input: {
-                'aria-invalid': fieldState.error ? true : undefined,
-              },
-            }}
-            className="rounded-xl"
+            value={field.value ?? ''}
+            error={fieldState.error?.message}
+            helperText={helperText}
+            aria-invalid={fieldState.error ? true : undefined}
           />
         )}
       />
@@ -103,21 +97,12 @@ export default function FormTextField<T extends FieldValues>(
     endAdornment,
     error,
     helperText,
+    id,
   } = props;
 
-  const slotProps: TextFieldProps['slotProps'] = {
-    input: {
-      startAdornment: startIcon ? (
-        <InputAdornment position="start">{startIcon}</InputAdornment>
-      ) : undefined,
-      endAdornment: endAdornment ? (
-        <InputAdornment position="end">{endAdornment}</InputAdornment>
-      ) : undefined,
-    },
-  };
-
   return (
-    <TextField
+    <Input
+      id={id}
       label={label}
       type={type}
       autoComplete={autoComplete}
@@ -126,11 +111,11 @@ export default function FormTextField<T extends FieldValues>(
       placeholder={placeholder}
       value={value}
       onChange={onChange}
-      fullWidth
-      error={error}
-      helperText={helperText}
-      slotProps={slotProps}
-      className="rounded-xl"
+      startIcon={startIcon}
+      endAdornment={endAdornment}
+      error={error ? helperText ?? 'Invalid value' : undefined}
+      helperText={!error ? helperText : undefined}
+      aria-invalid={error || undefined}
     />
   );
 }

@@ -191,6 +191,60 @@ export const apiClient = {
   postFormData<T>(path: string, formData: FormData, init?: Omit<RequestInit, 'body' | 'method'>) {
     return requestFormData<T>(path, formData, init);
   },
+
+  async fetchBlob(path: string): Promise<{ blob: Blob; contentType: string | null }> {
+    const isWhatsappMessageMedia =
+      path.includes('/messages/') && path.endsWith('/media');
+    const response = await fetch(`${API_BASE_URL}${path}`, {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        ...getOrganizationContextHeaders(),
+      },
+      cache: isWhatsappMessageMedia ? 'default' : 'no-store',
+    });
+
+    if (!response.ok) {
+      const parsed = await parseErrorMessage(response);
+      throw new ApiError(parsed.message, response.status, {
+        limitKey: parsed.limitKey,
+        effectiveLimit: parsed.effectiveLimit,
+        currentUsage: parsed.currentUsage,
+      });
+    }
+
+    const contentType = response.headers.get('content-type');
+    const blob = await response.blob();
+    return { blob, contentType };
+  },
+
+  async download(path: string, filename: string): Promise<void> {
+    const response = await fetch(`${API_BASE_URL}${path}`, {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        ...getOrganizationContextHeaders(),
+      },
+      cache: 'no-store',
+    });
+
+    if (!response.ok) {
+      const parsed = await parseErrorMessage(response);
+      throw new ApiError(parsed.message, response.status, {
+        limitKey: parsed.limitKey,
+        effectiveLimit: parsed.effectiveLimit,
+        currentUsage: parsed.currentUsage,
+      });
+    }
+
+    const blob = await response.blob();
+    const objectUrl = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = objectUrl;
+    link.download = filename;
+    link.click();
+    URL.revokeObjectURL(objectUrl);
+  },
 };
 
 export function getApiErrorMessage(error: unknown, fallback: string): string {

@@ -19,6 +19,7 @@ import type { ListColumnMappingTarget } from '@/lib/schemas/list-column-mapping'
 interface ListColumnMappingStepProps {
   targetColumns: ListColumnMappingTarget[];
   fileColumns: string[];
+  compact?: boolean;
 }
 
 function AutoMatchBanner({
@@ -53,13 +54,14 @@ function AutoMatchBanner({
 export default function ListColumnMappingStep({
   targetColumns,
   fileColumns,
+  compact = false,
 }: ListColumnMappingStepProps) {
   const { control, watch } = useFormContext<{ columnMappings: Array<{ targetColumnKey: string; sourceColumn: string }> }>();
   const mappings = watch('columnMappings') ?? [];
 
   return (
-    <Stack spacing={3}>
-      <BoxHeader />
+    <Stack spacing={compact ? 2 : 3}>
+      {compact ? null : <BoxHeader />}
       <AutoMatchBanner
         targetColumns={targetColumns}
         fileColumns={fileColumns}
@@ -67,9 +69,9 @@ export default function ListColumnMappingStep({
       />
 
       <Box
-        className="rounded-2xl border border-border"
+        className="rounded-xl border border-border"
         sx={{
-          maxHeight: { xs: '42vh', sm: '50vh' },
+          maxHeight: compact ? '36vh' : { xs: '42vh', sm: '50vh' },
           overflow: 'auto',
         }}
       >

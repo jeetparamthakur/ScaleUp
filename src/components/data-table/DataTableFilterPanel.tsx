@@ -1,6 +1,5 @@
 'use client';
 
-import Autocomplete from '@mui/material/Autocomplete';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import FilterListOutlinedIcon from '@mui/icons-material/FilterListOutlined';
@@ -19,6 +18,7 @@ import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { useMemo, useState } from 'react';
+import SearchSelect from '@/components/ui/inputs/SearchSelect';
 import { dataTableClassNames, dataTableSx } from './dataTableStyles';
 import { getActiveFieldFilters, type FieldFilter } from './filterTableRows';
 
@@ -177,29 +177,24 @@ export default function DataTableFilterPanel({
                 filterValueOptions,
                 row.field,
               ) ? (
-                <Autocomplete
-                  freeSolo
-                  size="small"
-                  className="w-full sm:flex-[2]"
-                  options={filterValueOptions[row.field] ?? []}
+                <Box className="w-full min-w-0 sm:flex-[2]">
+                <SearchSelect
+                  id={`data-table-filter-value-${row.id}`}
+                  className="w-full"
+                  label={`Value${draftRows.length > 1 ? ` ${index + 1}` : ''}`}
                   value={row.value}
-                  inputValue={row.value}
-                  onInputChange={(_event, newInputValue) => {
-                    updateDraftRow(row.id, { value: newInputValue });
-                  }}
-                  onChange={(_event, newValue) => {
-                    updateDraftRow(row.id, {
-                      value: typeof newValue === 'string' ? newValue : '',
-                    });
-                  }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label={`Value${draftRows.length > 1 ? ` ${index + 1}` : ''}`}
-                      placeholder="Search or enter value..."
-                    />
+                  onChange={(nextValue) =>
+                    updateDraftRow(row.id, { value: nextValue })
+                  }
+                  options={(filterValueOptions[row.field] ?? []).map(
+                    (option) => ({
+                      value: option,
+                      label: option,
+                    }),
                   )}
+                  placeholder="Search or select value…"
                 />
+                </Box>
               ) : (
                 <TextField
                   label={`Value${draftRows.length > 1 ? ` ${index + 1}` : ''}`}

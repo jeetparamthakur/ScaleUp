@@ -6,7 +6,7 @@ import type { FormFieldValidationType } from '@/lib/forms/form-field-validation.
 
 export type { FormFieldValidationType };
 
-export type FormModule = 'crm' | 'email' | 'settings' | 'website';
+export type FormModule = 'crm' | 'email' | 'settings' | 'website' | 'whatsapp';
 
 export type FormType = 'single' | 'wizard' | 'inline';
 

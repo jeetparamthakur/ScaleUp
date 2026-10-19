@@ -3,7 +3,7 @@
 import Alert from '@mui/material/Alert';
 import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/navigation';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { FormEditorState } from '@/components/forms/form-editor-state';
 import FormModulesEditorShell, {
   type FormModulesEditorTab,
@@ -18,9 +18,18 @@ import {
 } from '@/hooks/useForms';
 import { getApiErrorMessage } from '@/lib/api';
 import {
+  formKeyShowsTablesEditorTab,
+  isWhatsappListImportFormKey,
+} from '@/lib/forms/crm-form-keys';
+import { getDefaultFormModulesEditorTab } from '@/lib/forms/form-modules-editor-tab';
+import {
   areFormSchemasEqual,
   areTableColumnsEqual,
 } from '@/lib/forms/schema-compare';
+import {
+  editorFieldsFromTableColumns,
+  tableColumnsFromEditorFields,
+} from '@/lib/forms/table-columns-form-editor.adapter';
 import type { UpdateFormSchemaInput } from '@/lib/forms/types';
 
 interface PlatformFormEditorContentProps {
@@ -41,24 +50,67 @@ export default function PlatformFormEditorContent({
     isPublishingPlatform,
   } = useFormMutations(formKey);
 
+  const isWhatsappImportForm = isWhatsappListImportFormKey(formKey);
+
   const registryItem = useMemo(
     () => registryData?.forms.find((form) => form.key === formKey),
     [formKey, registryData?.forms],
   );
 
   const supportsTableColumns = registryItem?.supportsTableColumns ?? false;
+  const showTablesEditorTab =
+    supportsTableColumns && formKeyShowsTablesEditorTab(formKey);
   const [activeTab, setActiveTab] = useState<FormModulesEditorTab>('layout');
   const [editorState, setEditorState] = useState<FormEditorState | null>(null);
+  const tabInitializedForFormKey = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (isLoading || !data) {
+      return;
+    }
+
+    if (tabInitializedForFormKey.current === formKey) {
+      return;
+    }
+
+    tabInitializedForFormKey.current = formKey;
+    const fieldCount = isWhatsappImportForm
+      ? (data.tableColumns?.length ?? 0)
+      : data.fields.length;
+
+    setActiveTab(
+      getDefaultFormModulesEditorTab(
+        supportsTableColumns,
+        fieldCount,
+        showTablesEditorTab,
+      ),
+    );
+  }, [
+    data,
+    formKey,
+    isLoading,
+    isWhatsappImportForm,
+    showTablesEditorTab,
+    supportsTableColumns,
+  ]);
 
   const handleEditorStateChange = useCallback((state: FormEditorState | null) => {
     setEditorState(state);
   }, []);
 
   async function handleSaveDraft(input: UpdateFormSchemaInput) {
+    const payload: UpdateFormSchemaInput = isWhatsappImportForm
+      ? {
+          fields: [],
+          tableColumns: tableColumnsFromEditorFields(input.fields),
+          version: input.version,
+        }
+      : input;
+
     try {
-      await updatePlatformSchema(input);
+      await updatePlatformSchema(payload);
       notifySuccess(
-        activeTab === 'tables'
+        activeTab === 'tables' || isWhatsappImportForm
           ? 'Draft table columns saved'
           : 'Draft layout saved — publish when ready for organizations',
       );
@@ -140,16 +192,23 @@ export default function PlatformFormEditorContent({
     );
   }
 
+  const resolvedActiveTab =
+    !showTablesEditorTab && activeTab === 'tables' ? 'layout' : activeTab;
+
   const schemaView =
-    activeTab === 'summary' ? ('summary' as const) : ('layout' as const);
+    resolvedActiveTab === 'summary' ? ('summary' as const) : ('layout' as const);
+
+  const editorFields = isWhatsappImportForm
+    ? editorFieldsFromTableColumns(data.tableColumns ?? [])
+    : data.fields;
 
   return (
     <FormModulesEditorShell
       formKey={formKey}
       scope="platform"
-      activeTab={activeTab}
+      activeTab={resolvedActiveTab}
       onTabChange={setActiveTab}
-      supportsTableColumns={supportsTableColumns}
+      showTablesEditorTab={showTablesEditorTab}
       hasUnsavedChanges={editorState?.hasChanges ?? false}
       hasUnpublishedDraft={hasUnpublishedDraft}
       isSubmitting={isUpdatingPlatform}
@@ -159,7 +218,7 @@ export default function PlatformFormEditorContent({
       onSave={handleShellSaveDraft}
       onPublish={() => void handlePublish()}
     >
-      {activeTab === 'tables' && supportsTableColumns ? (
+      {resolvedActiveTab === 'tables' && showTablesEditorTab ? (
         <FormTableColumnsEditor
           key={`tables-${formKey}-${data.version ?? 0}-${data.publishedVersion ?? 0}`}
           formKey={formKey}
@@ -175,9 +234,9 @@ export default function PlatformFormEditorContent({
         />
       ) : (
         <FormSchemaEditor
-          key={`fields-${formKey}-${data.version ?? 0}-${data.publishedVersion ?? 0}`}
+          key={`fields-${formKey}-${data.version ?? 0}-${data.publishedVersion ?? 0}-${isWhatsappImportForm ? (data.tableColumns?.length ?? 0) : data.fields.length}`}
           formKey={formKey}
-          fields={data.fields}
+          fields={editorFields}
           mode="platform"
           schemaVersion={data.version}
           layoutMode="modules"

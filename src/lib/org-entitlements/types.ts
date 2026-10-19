@@ -1,4 +1,13 @@
-export const ORG_MODULES = ['dashboard', 'email', 'crm', 'website', 'settings'] as const;
+export const ORG_MODULES = [
+  'dashboard',
+  'email',
+  'whatsapp',
+  'inbox',
+  'crm',
+  'website',
+  'smm',
+  'settings',
+] as const;
 
 export type OrgModule = (typeof ORG_MODULES)[number];
 
@@ -47,8 +56,11 @@ export const ORG_LIMIT_DEFINITIONS: OrgLimitDefinition[] = [
 export const ORG_MODULE_LABELS: Record<OrgModule, string> = {
   dashboard: 'Dashboard',
   email: 'Email',
+  whatsapp: 'WhatsApp',
+  inbox: 'Inbox',
   crm: 'CRM',
   website: 'Website',
+  smm: 'SMM',
   settings: 'Settings',
 };
 

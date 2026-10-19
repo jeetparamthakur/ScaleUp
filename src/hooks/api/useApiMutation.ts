@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { getApiErrorMessage } from '@/lib/api';
 
 interface UseApiMutationResult<TInput, TOutput> {
@@ -15,6 +15,11 @@ export function useApiMutation<TInput, TOutput>(
 ): UseApiMutationResult<TInput, TOutput> {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const mutationFnRef = useRef(mutationFn);
+
+  useEffect(() => {
+    mutationFnRef.current = mutationFn;
+  }, [mutationFn]);
 
   const reset = useCallback(() => {
     setError(null);
@@ -26,7 +31,7 @@ export function useApiMutation<TInput, TOutput>(
       setError(null);
 
       try {
-        return await mutationFn(input);
+        return await mutationFnRef.current(input);
       } catch (err) {
         setError(getApiErrorMessage(err, 'Request failed'));
         throw err;
@@ -34,7 +39,7 @@ export function useApiMutation<TInput, TOutput>(
         setIsLoading(false);
       }
     },
-    [mutationFn],
+    [],
   );
 
   return { mutate, isLoading, error, reset };

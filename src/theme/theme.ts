@@ -5,6 +5,7 @@ import {
   primaryButtonShadow,
   surfaceBorderColor,
 } from './colors';
+import { getMuiTypographyOptions } from './typography';
 
 export function createAppTheme(mode: PaletteMode) {
   const colors = getModeColors(mode);
@@ -33,13 +34,7 @@ export function createAppTheme(mode: PaletteMode) {
         secondary: colors.secondary,
       },
     },
-    typography: {
-      fontFamily: 'var(--font-inter), Arial, sans-serif',
-      h1: { fontWeight: 700, letterSpacing: '-0.03em' },
-      h2: { fontWeight: 700, letterSpacing: '-0.02em' },
-      h3: { fontWeight: 700, letterSpacing: '-0.02em' },
-      button: { textTransform: 'none', fontWeight: 600 },
-    },
+    typography: getMuiTypographyOptions(),
     shape: { borderRadius: 12 },
     components: {
       MuiCssBaseline: {
@@ -79,6 +74,12 @@ export function createAppTheme(mode: PaletteMode) {
           root: {
             '& .MuiOutlinedInput-root': {
               borderRadius: 10,
+              minHeight: 45,
+              maxHeight: 45,
+              '& .MuiInputBase-input': {
+                paddingTop: '10.5px',
+                paddingBottom: '10.5px',
+              },
               '&.Mui-focused': {
                 boxShadow: focusRing(mode),
               },

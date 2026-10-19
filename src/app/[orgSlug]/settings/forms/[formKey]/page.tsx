@@ -28,7 +28,7 @@ export default async function OrgFormEditorPage({ params }: OrgFormEditorPagePro
   }
 
   return (
-    <DashboardContent>
+    <DashboardContent viewportFill>
       <OrgFormEditorContent formKey={decodedFormKey} />
     </DashboardContent>
   );

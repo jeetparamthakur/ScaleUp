@@ -419,6 +419,11 @@ export default function DataTable<T extends object>({
                         <Checkbox
                           size="small"
                           checked={rowSelection.selectedIds.has(getRowId(row))}
+                          disabled={
+                            rowSelection.isRowSelectable
+                              ? !rowSelection.isRowSelectable(getRowId(row))
+                              : false
+                          }
                           onChange={() =>
                             rowSelection.onToggleRow(getRowId(row))
                           }

@@ -3,16 +3,22 @@ import type { OrgModule } from './types';
 export const ORG_MODULE_NAV_ORDER: OrgModule[] = [
   'dashboard',
   'email',
+  'whatsapp',
+  'inbox',
   'crm',
   'website',
+  'smm',
   'settings',
 ];
 
 export const ORG_MODULE_DEFAULT_PATHS: Record<OrgModule, string> = {
   dashboard: '/',
   email: '/email/campaigns',
+  whatsapp: '/whatsapp/dashboard',
+  inbox: '/inbox',
   crm: '/crm',
   website: '/website',
+  smm: '/smm',
   settings: '/settings',
 };
 

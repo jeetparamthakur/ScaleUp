@@ -39,7 +39,7 @@ Strict quality gates enforced in the build script (lint, audit, deps) plus ESLin
 
 - Product name: **Markos**
 - Voice: direct, technical, confident — no hype
-- Primary brand color: indigo (`#4338CA` light / `#818CF8` dark)
+- Primary brand color: set `NEXT_PUBLIC_BRAND_PRIMARY` (hex); light/dark shades are derived automatically
 
 ## Evidence on Hand
 

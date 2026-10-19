@@ -63,8 +63,8 @@ export default function MeetingsToolbar({
               sx={
                 isActive
                   ? {
-                      bgcolor: '#4338CA',
-                      '&:hover': { bgcolor: '#3730A3' },
+                      bgcolor: 'primary.main',
+                      '&:hover': { bgcolor: 'primary.dark' },
                     }
                   : {
                       borderColor: 'divider',

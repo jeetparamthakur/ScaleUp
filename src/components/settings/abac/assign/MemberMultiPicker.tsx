@@ -187,7 +187,13 @@ export default function MemberMultiPicker({
         placeholder="Search members..."
         size="small"
         fullWidth
+        autoComplete="off"
+        name="member-multi-picker-search"
         slotProps={{
+          htmlInput: {
+            autoComplete: 'off',
+            'data-form-type': 'other',
+          },
           input: {
             startAdornment: (
               <SearchOutlinedIcon

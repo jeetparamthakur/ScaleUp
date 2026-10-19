@@ -61,4 +61,17 @@ export const dataTableSx = {
       bgcolor: 'action.selected',
     },
   } satisfies SxProps<Theme>,
+
+  /** Toolbar search: no primary focus ring (global TextField uses `focusRing`). */
+  searchField: {
+    '& .MuiOutlinedInput-root': {
+      '&.Mui-focused': {
+        boxShadow: 'none',
+      },
+      '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+        borderColor: 'divider',
+        borderWidth: 1,
+      },
+    },
+  } satisfies SxProps<Theme>,
 } as const;

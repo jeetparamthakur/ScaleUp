@@ -67,7 +67,7 @@ export default function MailboxProviderLogo({
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
         >
-          <rect x="2" y="4" width="20" height="16" rx="2.5" fill="#4338CA" />
+          <rect x="2" y="4" width="20" height="16" rx="2.5" fill="var(--color-primary)" />
           <path
             d="M2 7.5 12 13l10-5.5"
             stroke="#fff"

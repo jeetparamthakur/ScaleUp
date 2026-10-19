@@ -31,7 +31,7 @@ interface FormModulesEditorShellProps {
   formKey: string;
   activeTab: FormModulesEditorTab;
   onTabChange: (tab: FormModulesEditorTab) => void;
-  supportsTableColumns: boolean;
+  showTablesEditorTab: boolean;
   hasUnsavedChanges: boolean;
   readOnly?: boolean;
   isSubmitting?: boolean;
@@ -51,7 +51,7 @@ export default function FormModulesEditorShell({
   formKey,
   activeTab,
   onTabChange,
-  supportsTableColumns,
+  showTablesEditorTab,
   hasUnsavedChanges,
   readOnly = false,
   isSubmitting = false,
@@ -123,13 +123,15 @@ export default function FormModulesEditorShell({
     runOrConfirm({ type: 'module', formKey: nextFormKey });
   }
 
+  const layoutTabUsesSplitScroll = activeTab === 'layout';
+
   return (
-    <Stack spacing={0} className="min-h-[calc(100vh-12rem)]">
+    <Stack spacing={0} className="flex h-full min-h-0 flex-1 flex-col">
       <Stack
         direction={{ xs: 'column', lg: 'row' }}
         spacing={2}
-        sx={{ alignItems: { lg: 'flex-start' }, justifyContent: 'space-between' }}
-        className="mb-4"
+        sx={{ alignItems: { lg: 'flex-end' }, justifyContent: 'space-between' }}
+        className="mb-3 shrink-0 overflow-visible pt-1"
       >
         <Box className="min-w-0 flex-1">
           <SettingsNavButton
@@ -160,12 +162,14 @@ export default function FormModulesEditorShell({
         />
       </Stack>
 
-      <Paper className="dashboard-panel surface-panel flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl shadow-none">
+      <Paper
+        className="dashboard-panel surface-panel flex h-full min-h-0 flex-1 flex-col overflow-hidden rounded-2xl shadow-none"
+      >
         <Stack
           direction={{ xs: 'column', sm: 'row' }}
           spacing={1}
           sx={{ alignItems: { sm: 'center' }, justifyContent: 'space-between' }}
-          className="px-4 pt-2"
+          className="shrink-0 px-4 pt-2"
         >
           <Tabs
             value={activeTab}
@@ -184,7 +188,7 @@ export default function FormModulesEditorShell({
               iconPosition="start"
               label="Summary"
             />
-            {supportsTableColumns ? (
+            {showTablesEditorTab ? (
               <Tab
                 value="tables"
                 icon={<TableChartOutlinedIcon fontSize="small" />}
@@ -222,8 +226,8 @@ export default function FormModulesEditorShell({
 
         <Box
           className={
-            activeTab === 'layout'
-              ? 'min-h-0 flex-1 overflow-auto'
+            layoutTabUsesSplitScroll
+              ? 'flex min-h-0 flex-1 flex-col overflow-hidden'
               : 'min-h-0 flex-1 overflow-auto p-4'
           }
         >
@@ -231,7 +235,7 @@ export default function FormModulesEditorShell({
         </Box>
 
         {!readOnly ? (
-          <Box className="sticky bottom-0 border-t border-border/60 bg-background/95 p-3 backdrop-blur">
+          <Box className="shrink-0 border-t border-border/60 bg-background/95 p-3">
             <Stack
               direction="row"
               spacing={1}

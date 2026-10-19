@@ -15,6 +15,7 @@ const MODULE_LABELS: Record<FormModule, string> = {
   email: 'Email',
   settings: 'Settings',
   website: 'Website',
+  whatsapp: 'WhatsApp',
 };
 
 interface FormEditorShellProps {

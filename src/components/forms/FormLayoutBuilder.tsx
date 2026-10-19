@@ -649,7 +649,9 @@ export default function FormLayoutBuilder({
 
   function renderCompactCanvas(content: ReactNode) {
     return (
-      <Box className="flex min-h-[520px] min-w-0 flex-1 flex-col overflow-auto p-4 sm:p-5 md:p-6">
+      <Box
+        className="flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto overflow-x-hidden p-4 sm:p-5 md:p-6"
+      >
         {content}
       </Box>
     );
@@ -794,7 +796,11 @@ export default function FormLayoutBuilder({
   );
 
   if (compactChrome) {
-    return renderCompactCanvas(canvasBody);
+    return (
+      <Box className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-white">
+        {renderCompactCanvas(canvasBody)}
+      </Box>
+    );
   }
 
   return (

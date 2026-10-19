@@ -2,7 +2,10 @@ import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import ContactsOutlinedIcon from '@mui/icons-material/ContactsOutlined';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined';
+import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import type { SvgIconComponent } from '@mui/icons-material';
 import type { OrgModule } from './types';
 
@@ -26,6 +29,18 @@ export const ORG_MODULE_UI: Record<OrgModule, OrgModuleUiMeta> = {
     icon: EmailOutlinedIcon,
     accentClass: 'bg-sky-500/10 text-sky-700 dark:text-sky-300',
   },
+  whatsapp: {
+    label: 'WhatsApp',
+    description: 'Broadcast campaigns, contacts, and WhatsApp messaging.',
+    icon: WhatsAppIcon,
+    accentClass: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300',
+  },
+  inbox: {
+    label: 'Inbox',
+    description: 'Unified social messages across connected channels.',
+    icon: InboxOutlinedIcon,
+    accentClass: 'bg-rose-500/10 text-rose-700 dark:text-rose-300',
+  },
   crm: {
     label: 'CRM',
     description: 'Prospects, companies, pipeline, and follow-ups.',
@@ -37,6 +52,12 @@ export const ORG_MODULE_UI: Record<OrgModule, OrgModuleUiMeta> = {
     description: 'Properties, audits, and SEO monitoring.',
     icon: LanguageOutlinedIcon,
     accentClass: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300',
+  },
+  smm: {
+    label: 'SMM',
+    description: 'Social media marketing and publishing.',
+    icon: ShareOutlinedIcon,
+    accentClass: 'bg-fuchsia-500/10 text-fuchsia-700 dark:text-fuchsia-300',
   },
   settings: {
     label: 'Settings',

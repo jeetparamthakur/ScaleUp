@@ -6,15 +6,21 @@ import { LIST_IMPORT_WIZARD_STEPS } from '@/lib/schemas/contact-list-import';
 
 interface ListImportStepperProps {
   activeStepIndex: number;
+  compact?: boolean;
 }
 
-const CIRCLE_SIZE = 36;
-const CIRCLE_RADIUS = CIRCLE_SIZE / 2;
-const LINE_HEIGHT = 3;
+const CIRCLE_SIZE_DEFAULT = 36;
+const LINE_HEIGHT_DEFAULT = 3;
+const CIRCLE_SIZE_COMPACT = 26;
+const LINE_HEIGHT_COMPACT = 2;
 
 export default function ListImportStepper({
   activeStepIndex,
+  compact = false,
 }: ListImportStepperProps) {
+  const circleSize = compact ? CIRCLE_SIZE_COMPACT : CIRCLE_SIZE_DEFAULT;
+  const circleRadius = circleSize / 2;
+  const lineHeight = compact ? LINE_HEIGHT_COMPACT : LINE_HEIGHT_DEFAULT;
   return (
     <Box
       component="nav"
@@ -53,10 +59,10 @@ export default function ListImportStepper({
                   aria-hidden
                   sx={{
                     position: 'absolute',
-                    top: CIRCLE_RADIUS - LINE_HEIGHT / 2,
-                    left: `calc(50% + ${CIRCLE_RADIUS}px)`,
-                    width: `calc(100% - ${CIRCLE_SIZE}px)`,
-                    height: LINE_HEIGHT,
+                    top: circleRadius - lineHeight / 2,
+                    left: `calc(50% + ${circleRadius}px)`,
+                    width: `calc(100% - ${circleSize}px)`,
+                    height: lineHeight,
                     zIndex: 0,
                   }}
                 >
@@ -85,14 +91,16 @@ export default function ListImportStepper({
               ) : null}
 
               <Box
-                className={`relative z-10 flex items-center justify-center rounded-full text-sm font-bold transition-colors duration-300 ${
+                className={`relative z-10 flex items-center justify-center rounded-full font-bold transition-colors duration-300 ${
+                  compact ? 'text-xs' : 'text-sm'
+                } ${
                   isReached
                     ? 'bg-foreground text-background shadow-sm'
                     : 'text-text-secondary'
                 }`}
                 sx={{
-                  width: CIRCLE_SIZE,
-                  height: CIRCLE_SIZE,
+                  width: circleSize,
+                  height: circleSize,
                   flexShrink: 0,
                   backgroundColor: isReached ? undefined : 'var(--background)',
                   border: isReached
@@ -105,7 +113,9 @@ export default function ListImportStepper({
 
               <Typography
                 variant="caption"
-                className={`mt-1.5 px-1 text-center leading-snug ${
+                className={`px-0.5 text-center leading-tight ${
+                  compact ? 'mt-1 text-[0.65rem]' : 'mt-1.5'
+                } ${
                   isActive
                     ? 'font-bold text-foreground'
                     : isComplete

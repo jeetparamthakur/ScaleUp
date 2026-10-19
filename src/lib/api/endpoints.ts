@@ -165,6 +165,47 @@ export const ENDPOINTS = {
     ) =>
       `/email-campaigns/${campaignId}/steps/${stepOrder}/attachments/copy-from-template/${templateStepId}`,
   },
+  whatsappTemplates: {
+    list: '/whatsapp-templates',
+    byId: (id: string) => `/whatsapp-templates/${id}`,
+  },
+  whatsappCampaigns: {
+    list: '/whatsapp-campaigns',
+    dashboard: '/whatsapp-campaigns/dashboard',
+    dashboardExport: '/whatsapp-campaigns/dashboard/export',
+    byId: (id: string) => `/whatsapp-campaigns/${id}`,
+    schedule: (id: string) => `/whatsapp-campaigns/${id}/schedule`,
+    recipients: (id: string) => `/whatsapp-campaigns/${id}/recipients`,
+    addableListMembers: (id: string) =>
+      `/whatsapp-campaigns/${id}/addable-list-members`,
+    replies: (id: string) => `/whatsapp-campaigns/${id}/replies`,
+  },
+  whatsapp: {
+    availability: '/whatsapp/availability',
+    connections: '/whatsapp/connections',
+    connectionById: (id: string) => `/whatsapp/connections/${id}`,
+    connectionStart: (id: string) => `/whatsapp/connections/${id}/start`,
+    connectionQr: (id: string) => `/whatsapp/connections/${id}/qr`,
+    connectionDisconnect: (id: string) =>
+      `/whatsapp/connections/${id}/disconnect`,
+  },
+  whatsappContactLists: {
+    list: '/whatsapp-contact-lists',
+    byId: (id: string) => `/whatsapp-contact-lists/${id}`,
+    members: (id: string) => `/whatsapp-contact-lists/${id}/members`,
+    memberById: (listId: string, memberId: string) =>
+      `/whatsapp-contact-lists/${listId}/members/${memberId}`,
+    importableFields: '/whatsapp-contact-lists/importable-fields',
+    importPreview: '/whatsapp-contact-lists/import/preview',
+    import: '/whatsapp-contact-lists/import',
+    importFromProspects: '/whatsapp-contact-lists/import-from-prospects',
+    appendImportPreview: (id: string) =>
+      `/whatsapp-contact-lists/${id}/import/preview`,
+    appendImport: (id: string) => `/whatsapp-contact-lists/${id}/import`,
+    appendFromProspects: (id: string) =>
+      `/whatsapp-contact-lists/${id}/import-from-prospects`,
+    exportPdf: (id: string) => `/whatsapp-contact-lists/${id}/export/pdf`,
+  },
   contactLists: {
     list: '/contact-lists',
     byId: (id: string) => `/contact-lists/${id}`,

@@ -5,14 +5,24 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { useSession } from '@/hooks/useAuth';
 import { hasPermission, isPlatformOwner } from '@/lib/api/types/auth.types';
+import { useResolvedEnabledModules } from '@/hooks/useResolvedEnabledModules';
+import { isOrgModuleEnabled } from '@/lib/org-entitlements/workspace-access';
 import { settingsNavItems, settingsSections } from '@/lib/settings-navigation';
 import SettingsSectionCard from '@/components/settings/SettingsSectionCard';
 
 export default function SettingsContent() {
   const { data: session } = useSession();
+  const enabledModules = useResolvedEnabledModules();
 
   const visibleItems = settingsNavItems.filter((item) => {
     if (item.platformOwnerOnly && !isPlatformOwner(session)) {
+      return false;
+    }
+
+    if (
+      item.requiredOrgModule &&
+      !isOrgModuleEnabled(enabledModules, item.requiredOrgModule)
+    ) {
       return false;
     }
 

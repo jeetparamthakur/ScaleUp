@@ -1,6 +1,7 @@
 import {
   CRM_COMPANY_CREATE_FORM_KEY,
   CRM_PROSPECT_CREATE_FORM_KEY,
+  WHATSAPP_LIST_IMPORT_FORM_KEY,
   isManageableFormKey,
   MANAGEABLE_FORM_KEYS,
 } from '@/lib/forms/crm-form-keys';
@@ -55,6 +56,10 @@ export function formKeyToCustomFieldEntity(
     formKey.startsWith('crm.company.')
   ) {
     return 'company';
+  }
+
+  if (formKey === WHATSAPP_LIST_IMPORT_FORM_KEY) {
+    return 'prospect';
   }
 
   return null;

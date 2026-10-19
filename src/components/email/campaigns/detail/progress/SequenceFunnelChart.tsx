@@ -4,11 +4,14 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { useMemo } from 'react';
+import { getModeColors } from '@/theme/colors';
+
+const brandPrimary = getModeColors('light').primary;
 
 export const SEQUENCE_FUNNEL_CHART_COLORS = [
-  '#818CF8',
-  '#38BDF8',
-  '#34D399',
+  brandPrimary,
+  brandPrimary,
+  brandPrimary,
   '#FBBF24',
   '#F87171',
   '#A78BFA',

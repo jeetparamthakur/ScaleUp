@@ -22,12 +22,15 @@ import {
   getDeliveryTrendXAxisInterval,
   type DeliveryTrendPoint,
 } from '@/lib/email/campaigns/delivery-trend-chart-utils';
+import { getModeColors } from '@/theme/colors';
+
+const brandPrimary = getModeColors('light').primary;
 
 const DELIVERY_LINES = [
   {
     key: 'totalSent',
     label: 'Total sent',
-    color: '#4338CA',
+    color: brandPrimary,
     marker: 'square',
     strokeWidth: 2.5,
   },

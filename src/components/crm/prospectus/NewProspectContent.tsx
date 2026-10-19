@@ -122,7 +122,6 @@ export default function NewProspectContent() {
     <CrmHubShell actions={headerActions}>
       <NewProspectForm
         fields={createFormFields}
-        layoutFields={fieldSchema.fields}
         isSubmitting={isCreating}
         companyFields={companyFields}
         companyCategories={companyCategories}

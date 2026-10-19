@@ -1,7 +1,9 @@
 import ContactsOutlinedIcon from '@mui/icons-material/ContactsOutlined';
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
+import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined';
 import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined';
+import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import type { SvgIconComponent } from '@mui/icons-material';
 import { crmTabs, getCrmPageTitle } from '@/lib/crm/navigation';
@@ -10,6 +12,12 @@ import {
   emailSecondaryTabs,
   getEmailPageTitle,
 } from '@/lib/email/navigation';
+import {
+  getWhatsappPageTitle,
+  whatsappPrimaryTabs,
+  whatsappSecondaryTabs,
+} from '@/lib/whatsapp/navigation';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import { getWebsitePageTitle, websiteTabs } from '@/lib/website/navigation';
 import { getEmailConfigCategoryFromPathname } from '@/lib/email/settings-navigation';
 import { getSettingsPageTitle } from '@/lib/settings-navigation';
@@ -184,6 +192,34 @@ export const workspaceNavItems: NavItem[] = [
     ],
   },
   {
+    label: 'WhatsApp',
+    href: '/whatsapp',
+    icon: WhatsAppIcon,
+    orgModule: 'whatsapp',
+    children: [
+      ...whatsappPrimaryTabs.map((tab) => ({
+        label: tab.label,
+        href: tab.href,
+        icon: tab.icon,
+        requiredPermission: tab.requiredPermission,
+        requiredAnyPermissions: tab.requiredAnyPermissions,
+      })),
+      ...whatsappSecondaryTabs.map((tab) => ({
+        label: tab.label,
+        href: tab.href,
+        icon: tab.icon,
+        requiredPermission: tab.requiredPermission,
+        requiredAnyPermissions: tab.requiredAnyPermissions,
+      })),
+    ],
+  },
+  {
+    label: 'Inbox',
+    href: '/inbox',
+    icon: InboxOutlinedIcon,
+    orgModule: 'inbox',
+  },
+  {
     label: 'CRM',
     href: '/crm',
     icon: ContactsOutlinedIcon,
@@ -207,6 +243,12 @@ export const workspaceNavItems: NavItem[] = [
       icon: tab.icon,
       requiredPermission: tab.requiredPermission,
     })),
+  },
+  {
+    label: 'SMM',
+    href: '/smm',
+    icon: ShareOutlinedIcon,
+    orgModule: 'smm',
   },
 ];
 
@@ -239,6 +281,11 @@ export function getPageTitle(pathname: string): string {
     return emailTitle;
   }
 
+  const whatsappTitle = getWhatsappPageTitle(pathname);
+  if (whatsappTitle) {
+    return whatsappTitle;
+  }
+
   const crmTitle = getCrmPageTitle(pathname);
   if (crmTitle) {
     return crmTitle;
@@ -247,6 +294,14 @@ export function getPageTitle(pathname: string): string {
   const websiteTitle = getWebsitePageTitle(pathname);
   if (websiteTitle) {
     return websiteTitle;
+  }
+
+  if (relativePath === '/inbox' || relativePath.startsWith('/inbox/')) {
+    return 'Inbox';
+  }
+
+  if (relativePath === '/smm' || relativePath.startsWith('/smm/')) {
+    return 'SMM';
   }
 
   if (relativePath === '/') {

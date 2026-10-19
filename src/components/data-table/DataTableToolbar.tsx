@@ -7,7 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import type { ReactNode } from 'react';
-import { dataTableClassNames } from './dataTableStyles';
+import { dataTableClassNames, dataTableSx } from './dataTableStyles';
 import {
   DataTableFilterButton,
   DataTableFieldFiltersSection,
@@ -72,7 +72,14 @@ export default function DataTableToolbar({
             placeholder={searchPlaceholder}
             size="small"
             className="w-full rounded-xl sm:w-72"
+            sx={dataTableSx.searchField}
+            autoComplete="off"
+            name="data-table-search"
             slotProps={{
+              htmlInput: {
+                autoComplete: 'off',
+                'data-form-type': 'other',
+              },
               input: {
                 startAdornment: (
                   <InputAdornment position="start">

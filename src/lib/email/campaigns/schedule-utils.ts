@@ -187,13 +187,41 @@ function getTimezoneOffsetLabel(timezone: string, date = new Date()): string {
   );
 }
 
-export function buildTimezoneOptions(
-  preferredTimezone = getDefaultTimezone(),
-): TimezoneOption[] {
-  const now = new Date();
-  const timezones = Intl.supportedValuesOf('timeZone');
+const FALLBACK_TIMEZONE_IDS = [
+  'UTC',
+  'America/Los_Angeles',
+  'America/New_York',
+  'Europe/London',
+  'Asia/Dubai',
+  'Asia/Kolkata',
+  'Asia/Calcutta',
+  'Asia/Singapore',
+  'Australia/Sydney',
+] as const;
 
-  const options = timezones.map((timezone) => ({
+function listTimeZoneIds(): string[] {
+  try {
+    if (typeof Intl.supportedValuesOf === 'function') {
+      const values = Intl.supportedValuesOf('timeZone');
+      if (values.length > 0) {
+        return [...values];
+      }
+    }
+  } catch {
+    // Intl may be unavailable in some environments.
+  }
+
+  return [...FALLBACK_TIMEZONE_IDS];
+}
+
+let cachedTimezoneOptionsBase: TimezoneOption[] | null = null;
+
+function buildTimezoneOptionsBase(now = new Date()): TimezoneOption[] {
+  if (cachedTimezoneOptionsBase) {
+    return cachedTimezoneOptionsBase;
+  }
+
+  const options = listTimeZoneIds().map((timezone) => ({
     value: timezone,
     label: timezone.replace(/_/g, ' '),
     offsetLabel: getTimezoneOffsetLabel(timezone, now),
@@ -208,12 +236,39 @@ export function buildTimezoneOptions(
     return left.label.localeCompare(right.label);
   });
 
+  cachedTimezoneOptionsBase = options;
+  return options;
+}
+
+export function buildTimezoneOptions(
+  preferredTimezone = getDefaultTimezone(),
+): TimezoneOption[] {
+  const options = buildTimezoneOptionsBase();
+
   const preferred = options.find((option) => option.value === preferredTimezone);
   const remaining = options.filter(
     (option) => option.value !== preferredTimezone,
   );
 
   return preferred ? [preferred, ...remaining] : options;
+}
+
+export function resolveTimezoneOption(
+  timezone: string,
+  options = buildTimezoneOptions(),
+): TimezoneOption | null {
+  const trimmed = timezone.trim();
+  if (trimmed) {
+    const exact = options.find((option) => option.value === trimmed);
+    if (exact) {
+      return exact;
+    }
+  }
+
+  const fallbackId = getDefaultTimezone();
+  return (
+    options.find((option) => option.value === fallbackId) ?? options[0] ?? null
+  );
 }
 
 export function formatTimezoneLabel(

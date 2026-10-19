@@ -2,9 +2,9 @@
 
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-import IconButton from '@mui/material/IconButton';
 import { useState } from 'react';
 import FormTextField from './FormTextField';
+import InputButton from './inputs/InputButton';
 
 interface FormPasswordFieldProps {
   label: string;
@@ -47,20 +47,17 @@ export default function FormPasswordField({
       error={error}
       helperText={helperText}
       endAdornment={
-        <IconButton
-          type="button"
+        <InputButton
           aria-label={visible ? 'Hide password' : 'Show password'}
           onClick={() => setVisible((current) => !current)}
-          edge="end"
-          size="small"
-          className="form-field-action text-muted"
+          className="form-field-action"
         >
           {visible ? (
-            <VisibilityOffOutlinedIcon fontSize="small" />
+            <VisibilityOffOutlinedIcon sx={{ fontSize: 18 }} />
           ) : (
-            <VisibilityOutlinedIcon fontSize="small" />
+            <VisibilityOutlinedIcon sx={{ fontSize: 18 }} />
           )}
-        </IconButton>
+        </InputButton>
       }
     />
   );

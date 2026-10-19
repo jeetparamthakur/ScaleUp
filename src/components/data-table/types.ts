@@ -43,6 +43,7 @@ export interface ResolvedColumn<T> {
 export interface DataTableRowSelection {
   selectedIds: ReadonlySet<string>;
   onToggleRow: (rowId: string) => void;
+  isRowSelectable?: (rowId: string) => boolean;
   headerCheckbox: {
     checked: boolean;
     indeterminate: boolean;

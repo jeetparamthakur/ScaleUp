@@ -1,19 +1,12 @@
 'use client';
 
-import Autocomplete from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField';
-import { useMemo } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
+import TimezoneAutocompleteField from '@/components/email/campaigns/create/TimezoneAutocompleteField';
 import WizardFieldLabel from '@/components/email/campaigns/create/WizardFieldLabel';
-import {
-  buildTimezoneOptions,
-  formatTimezoneLabel,
-} from '@/lib/email/campaigns/schedule-utils';
 import type { CampaignWizardFormValues } from '@/lib/schemas/campaign-wizard';
 
 export default function TimezoneSelectField() {
   const { control } = useFormContext<CampaignWizardFormValues>();
-  const timezoneOptions = useMemo(() => buildTimezoneOptions(), []);
 
   return (
     <>
@@ -24,32 +17,12 @@ export default function TimezoneSelectField() {
         name="timezone"
         control={control}
         render={({ field, fieldState }) => (
-          <Autocomplete
+          <TimezoneAutocompleteField
             id="timezone"
-            options={timezoneOptions}
-            value={
-              timezoneOptions.find((option) => option.value === field.value) ??
-              null
-            }
-            onChange={(_event, option) => field.onChange(option?.value ?? '')}
-            getOptionLabel={(option) =>
-              `${option.label} (${option.offsetLabel})`
-            }
-            isOptionEqualToValue={(left, right) => left.value === right.value}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                fullWidth
-                error={Boolean(fieldState.error)}
-                helperText={
-                  fieldState.error?.message ??
-                  (field.value
-                    ? `Campaign schedule uses ${formatTimezoneLabel(field.value, timezoneOptions)}.`
-                    : 'Select the timezone used for launch date and sending window.')
-                }
-                className="rounded-xl"
-              />
-            )}
+            value={field.value}
+            onChange={field.onChange}
+            error={Boolean(fieldState.error)}
+            helperText={fieldState.error?.message}
           />
         )}
       />

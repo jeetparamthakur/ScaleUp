@@ -162,17 +162,20 @@ export default function TeamMembersContent() {
               getRowId={(row) => row.id}
               isLoading={isLoading}
               excludeFields={['id', 'roleId']}
+              searchPlaceholder="Search by name or email…"
               columnOverrides={{
                 username: { label: 'Username' },
                 email: { label: 'Email' },
-                roleName: { label: 'Role' },
+                roleName: { label: 'Role', searchable: false },
                 hierarchyLevel: {
                   label: 'Level',
+                  searchable: false,
                   render: (row) => `L${row.hierarchyLevel}`,
                 },
-                status: { label: 'Status' },
+                status: { label: 'Status', searchable: false },
                 joinedAt: {
                   label: 'Joined',
+                  searchable: false,
                   render: (row) => formatDate(row.joinedAt),
                 },
               }}

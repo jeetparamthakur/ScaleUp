@@ -1,13 +1,11 @@
 'use client';
 
 import AddIcon from '@mui/icons-material/Add';
-import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
-import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import SettingsLink from '@/components/settings/SettingsLink';
 import { useRouter } from 'next/navigation';
@@ -16,6 +14,7 @@ import { Controller, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import FormAlert from '@/components/ui/FormAlert';
 import FormTextField from '@/components/ui/FormTextField';
+import { SearchSelect } from '@/components/ui/inputs';
 import HierarchyLevelSelector from '@/components/settings/team/HierarchyLevelSelector';
 import InvitePreviewPanel from '@/components/settings/team/InvitePreviewPanel';
 import SettingsSubPageHeader from '@/components/settings/SettingsSubPageHeader';
@@ -32,11 +31,7 @@ export default function InviteMemberContent() {
   const { inviteMember, isLoading, error } = useInviteMember();
   const [successInviteUrl, setSuccessInviteUrl] = useState<string | null>(null);
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<InviteMemberFormValues>({
+  const { control, handleSubmit } = useForm<InviteMemberFormValues>({
     resolver: zodResolver(inviteMemberSchema),
     defaultValues: {
       email: '',
@@ -144,35 +139,36 @@ export default function InviteMemberContent() {
                 <Controller
                   name="roleId"
                   control={control}
-                  render={({ field }) => (
-                    <Autocomplete
-                      options={roles}
-                      loading={isLoadingRoles}
-                      getOptionLabel={(option: Role) => option.name}
-                      value={roles.find((role) => role.id === field.value) ?? null}
-                      onChange={(_, value) => field.onChange(value?.id ?? '')}
-                      isOptionEqualToValue={(option, value) => option.id === value.id}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          label="Role"
-                          error={Boolean(errors.roleId)}
-                          helperText={errors.roleId?.message}
-                          disabled={isLoading}
-                        />
-                      )}
-                      renderOption={(props, option) => (
-                        <Box component="li" {...props} key={option.id}>
+                  render={({ field, fieldState }) => (
+                    <SearchSelect
+                      id="invite-role"
+                      label="Role"
+                      value={field.value}
+                      onChange={field.onChange}
+                      disabled={isLoading || isLoadingRoles}
+                      error={fieldState.error?.message}
+                      options={roles.map((role: Role) => ({
+                        value: role.id,
+                        label: role.name,
+                        keywords: role.description ?? '',
+                      }))}
+                      renderOption={(option) => {
+                        const role = roles.find((item) => item.id === option.value);
+                        if (!role) {
+                          return option.label;
+                        }
+
+                        return (
                           <Stack>
                             <Typography variant="body2" className="font-semibold">
-                              {option.name}
+                              {role.name}
                             </Typography>
                             <Typography variant="caption" color="text.secondary">
-                              {option.description ?? 'No description'}
+                              {role.description ?? 'No description'}
                             </Typography>
                           </Stack>
-                        </Box>
-                      )}
+                        );
+                      }}
                     />
                   )}
                 />

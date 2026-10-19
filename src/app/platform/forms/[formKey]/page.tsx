@@ -23,7 +23,9 @@ export default async function PlatformFormEditorPage({
   }
 
   return (
-    <Box className="platform-chrome dashboard-chrome-x w-full">
+    <Box
+      className="platform-chrome dashboard-chrome-x flex h-full min-h-0 w-full flex-col overflow-hidden px-4 py-4 sm:px-6 lg:px-8 xl:px-10"
+    >
       <PlatformFormEditorContent formKey={decodedFormKey} />
     </Box>
   );

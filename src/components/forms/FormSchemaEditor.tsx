@@ -748,7 +748,9 @@ export default function FormSchemaEditor({
   }
 
   const layoutModulesColumn = (
-    <Box className="flex w-full shrink-0 flex-col border-b border-slate-200/90 bg-white xl:h-[calc(100vh-18rem)] xl:max-h-[calc(100vh-18rem)] xl:min-h-0 xl:w-[300px] xl:overflow-x-hidden xl:overflow-y-auto xl:border-b-0 xl:border-r">
+    <Box
+      className="flex w-full max-h-[38dvh] shrink-0 flex-col overflow-x-hidden overflow-y-auto border-b border-slate-200/90 bg-white xl:max-h-none xl:h-full xl:min-h-0 xl:w-[300px] xl:border-b-0 xl:border-r"
+    >
       <Stack spacing={2} className="p-4 xl:pr-2">
         <FormFieldPalette
           entity={customFieldEntity}
@@ -790,7 +792,14 @@ export default function FormSchemaEditor({
   );
 
   return (
-    <Stack spacing={layoutMode === 'modules' ? 0 : 3}>
+    <Stack
+      spacing={layoutMode === 'modules' ? 0 : 3}
+      className={
+        layoutMode === 'modules' && view === 'layout'
+          ? 'flex h-full min-h-0 flex-1 flex-col overflow-hidden'
+          : undefined
+      }
+    >
       {layoutMode === 'classic' ? (
         <Typography variant="body2" color="text.secondary">
           {mode === 'platform'
@@ -840,10 +849,13 @@ export default function FormSchemaEditor({
           spacing={layoutMode === 'modules' ? 0 : 2}
           sx={{ alignItems: 'stretch' }}
           className={
-            layoutMode === 'modules' ? 'min-h-[480px] w-full min-w-0 flex-1' : undefined
+            layoutMode === 'modules'
+              ? 'flex h-full min-h-0 w-full min-w-0 flex-1 flex-col overflow-hidden'
+              : undefined
           }
         >
           {layoutMode === 'modules' ? (
+            <Box className="flex min-h-0 flex-1 flex-col overflow-hidden">
             <DndContext
               sensors={layoutDragSensors}
               collisionDetection={layoutCanvasCollisionDetection}
@@ -851,7 +863,9 @@ export default function FormSchemaEditor({
               onDragEnd={handleLayoutDragEnd}
               onDragCancel={clearLayoutDragOverlayState}
             >
-              <Box className="flex min-h-[520px] w-full min-w-0 flex-1 flex-col xl:flex-row xl:items-stretch">
+              <Box
+                className="flex h-full min-h-0 w-full min-w-0 flex-1 flex-col overflow-hidden xl:flex-row xl:items-stretch"
+              >
                 {layoutModulesColumn}
                 <FormLayoutBuilder
                   fields={draftFields}
@@ -906,6 +920,7 @@ export default function FormSchemaEditor({
                 ) : null}
               </DragOverlay>
             </DndContext>
+            </Box>
           ) : (
             <>
               {classicSidebar}

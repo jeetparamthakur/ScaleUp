@@ -10,10 +10,12 @@ export { campaignCustomFieldsService } from './services/campaign-custom-fields.s
 export { inboxService } from './services/inbox.service';
 export { emailConfigService } from './services/email-config.service';
 export { emailTemplateService } from './services/email-template.service';
+export { whatsappTemplateService } from './services/whatsapp-template.service';
 export { companyConfigService } from './services/company-config.service';
 export { companiesService } from './services/companies.service';
 export { notionIntegrationsService } from './services/notion-integrations.service';
 export { contactListService } from './services/contact-list.service';
+export { whatsappContactListsService } from './services/whatsapp-contact-lists.service';
 export { manualListService } from './services/manual-list.service';
 export { analyticsService } from './services/analytics.service';
 export { auditLogsService } from './services/audit-logs.service';
@@ -69,3 +71,13 @@ export type {
   UpdateEmailTemplateInput,
   ListEmailTemplatesOptions,
 } from './types/email-template.types';
+export type {
+  WhatsappTemplate,
+  WhatsappTemplateType,
+  WhatsappTemplateVisibility,
+  WhatsappTemplateDelayMode,
+  WhatsappTemplateStep,
+  CreateWhatsappTemplateInput,
+  UpdateWhatsappTemplateInput,
+  ListWhatsappTemplatesOptions,
+} from './types/whatsapp-template.types';

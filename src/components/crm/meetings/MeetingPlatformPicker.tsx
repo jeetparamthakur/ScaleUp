@@ -37,8 +37,8 @@ export default function MeetingPlatformPicker({
             sx={
               isSelected
                 ? {
-                    bgcolor: '#4338CA',
-                    '&:hover': { bgcolor: '#3730A3' },
+                    bgcolor: 'primary.main',
+                    '&:hover': { bgcolor: 'primary.dark' },
                   }
                 : undefined
             }

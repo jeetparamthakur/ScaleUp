@@ -2,6 +2,7 @@ import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettin
 import DynamicFormOutlinedIcon from '@mui/icons-material/DynamicFormOutlined';
 import HistoryOutlinedIcon from '@mui/icons-material/HistoryOutlined';
 import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import type { SvgIconComponent } from '@mui/icons-material';
 
 export interface NavItem {
@@ -38,6 +39,11 @@ export const platformNavItems: NavItem[] = [
     label: 'Sign-in OAuth',
     href: '/platform/auth-oauth',
     icon: LoginOutlinedIcon,
+  },
+  {
+    label: 'WhatsApp / OpenWA',
+    href: '/platform/openwa',
+    icon: WhatsAppIcon,
   },
 ];
 
@@ -84,6 +90,10 @@ export function getPageDescription(pathname: string): string | null {
 
   if (pathname.startsWith('/platform/auth-oauth')) {
     return 'Configure Google and Apple sign-in for the platform login and signup pages.';
+  }
+
+  if (pathname.startsWith('/platform/openwa')) {
+    return 'Configure the OpenWA gateway URL and API key for workspace WhatsApp inbox.';
   }
 
   if (pathname.startsWith('/platform')) {

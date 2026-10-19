@@ -22,6 +22,7 @@ interface WizardDatePickerFieldProps {
   error?: boolean;
   helperText?: string;
   disabled?: boolean;
+  textFieldClassName?: string;
 }
 
 function parseIsoDate(value: string): DateTime | null {
@@ -41,6 +42,7 @@ export default function WizardDatePickerField({
   error = false,
   helperText,
   disabled = false,
+  textFieldClassName,
 }: WizardDatePickerFieldProps) {
   const [open, setOpen] = useState(false);
   const minDateTime = minDate ? parseIsoDate(minDate) : undefined;
@@ -79,7 +81,9 @@ export default function WizardDatePickerField({
             fullWidth: true,
             error,
             helperText,
-            className: 'rounded-xl',
+            className: textFieldClassName
+              ? `${textFieldClassName} rounded-xl`
+              : 'rounded-xl',
             onClick: openPicker,
             onKeyDown: (event) => {
               if (event.key === 'Enter' || event.key === ' ') {

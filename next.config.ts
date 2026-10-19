@@ -4,6 +4,10 @@ const backendUrl =
   process.env.MARKOS_BACKEND_INTERNAL_URL ?? 'http://localhost:3008';
 
 const nextConfig: NextConfig = {
+  experimental: {
+    // Video media is fetched on demand from OpenWA and can take >30s.
+    proxyTimeout: 180_000,
+  },
   async redirects() {
     return [
       {

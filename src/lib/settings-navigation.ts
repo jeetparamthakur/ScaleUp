@@ -8,7 +8,9 @@ import HistoryOutlinedIcon from '@mui/icons-material/HistoryOutlined';
 import PolicyOutlinedIcon from '@mui/icons-material/PolicyOutlined';
 import PaletteOutlinedIcon from '@mui/icons-material/PaletteOutlined';
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
+import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined';
 import type { SvgIconComponent } from '@mui/icons-material';
+import type { OrgModule } from '@/lib/org-entitlements/types';
 
 export type SettingsSectionId = 'preferences' | 'team' | 'access' | 'integrations';
 
@@ -20,6 +22,7 @@ export interface SettingsNavItem {
   section: SettingsSectionId;
   requiredPermission?: string;
   platformOwnerOnly?: boolean;
+  requiredOrgModule?: OrgModule;
 }
 
 export interface SettingsSection {
@@ -73,6 +76,15 @@ export const settingsNavItems: SettingsNavItem[] = [
     icon: HubOutlinedIcon,
     section: 'integrations',
     requiredPermission: 'integrations:manage',
+  },
+  {
+    label: 'Connect inbox',
+    href: '/settings/inbox',
+    description:
+      'Connect LinkedIn, WhatsApp, Facebook, Instagram, and X to your workspace inbox.',
+    icon: InboxOutlinedIcon,
+    section: 'integrations',
+    requiredOrgModule: 'inbox',
   },
   {
     label: 'Team',
@@ -170,6 +182,10 @@ export function getSettingsPageTitle(pathname: string): string | null {
 
   if (pathname === '/settings/connectors') {
     return 'Connectors';
+  }
+
+  if (pathname === '/settings/inbox') {
+    return 'Connect inbox';
   }
 
   const item = settingsNavItems.find((entry) => entry.href === pathname);

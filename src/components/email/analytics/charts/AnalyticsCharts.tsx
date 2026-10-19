@@ -17,11 +17,14 @@ import {
 } from 'recharts';
 import type { AnalyticsQueryPoint } from '@/lib/email/analytics/types';
 import { formatMetricValue } from '@/lib/email/analytics/types';
+import { getModeColors } from '@/theme/colors';
+
+const brandPrimary = getModeColors('light').primary;
 
 const CHART_COLORS = [
-  '#818CF8',
-  '#38BDF8',
-  '#34D399',
+  brandPrimary,
+  brandPrimary,
+  brandPrimary,
   '#FBBF24',
   '#F87171',
   '#A78BFA',
@@ -124,9 +127,9 @@ export function AnalyticsLineChart({ points, format }: ChartProps) {
         <Line
           type="monotone"
           dataKey="value"
-          stroke="#818CF8"
+          stroke={brandPrimary}
           strokeWidth={2.5}
-          dot={{ r: 3, fill: '#818CF8' }}
+          dot={{ r: 3, fill: brandPrimary }}
           activeDot={{ r: 5 }}
         />
       </LineChart>

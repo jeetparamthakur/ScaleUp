@@ -1,15 +1,21 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
 import {
   createContext,
   useCallback,
   useContext,
   useMemo,
+  useRef,
   type ReactNode,
 } from 'react';
 import { clearViewOrgCookie, type ViewOrgCookie } from '@/lib/platform/impersonation-cookie';
 import { stopImpersonation } from '@/lib/api/platform';
+
+const ImpersonationRouterBridge = dynamic(
+  () => import('./impersonation-router-bridge'),
+  { ssr: false },
+);
 
 interface ImpersonationContextValue {
   organization: ViewOrgCookie | null;
@@ -30,17 +36,20 @@ export function ImpersonationProvider({
   organization: ViewOrgCookie | null;
   children: ReactNode;
 }) {
-  const router = useRouter();
+  const navigateRef = useRef<((path: string) => void) | null>(null);
+
+  const registerNavigate = useCallback((navigate: (path: string) => void) => {
+    navigateRef.current = navigate;
+  }, []);
 
   const exitImpersonation = useCallback(async () => {
     try {
       await stopImpersonation(organization?.organizationId);
     } finally {
       clearViewOrgCookie();
-      router.push('/platform/tenants');
-      router.refresh();
+      navigateRef.current?.('/platform/tenants');
     }
-  }, [organization?.organizationId, router]);
+  }, [organization?.organizationId]);
 
   const value = useMemo(
     () => ({
@@ -53,6 +62,7 @@ export function ImpersonationProvider({
 
   return (
     <ImpersonationContext.Provider value={value}>
+      <ImpersonationRouterBridge onReady={registerNavigate} />
       {children}
     </ImpersonationContext.Provider>
   );

@@ -16,6 +16,7 @@ export default function DashboardLayout({
   mainClassName = 'app-mesh',
 }: DashboardLayoutProps) {
   const [sidebarOffset, setSidebarOffset] = useState(SIDEBAR_COLLAPSED_WIDTH);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleSidebarWidthChange = useCallback((width: number) => {
     setSidebarOffset(width);
@@ -23,18 +24,20 @@ export default function DashboardLayout({
 
   return (
     <Box
-      className="flex h-screen overflow-hidden"
+      className="workspace-shell flex h-screen overflow-hidden"
       style={{ '--sidebar-offset': `${sidebarOffset}px` } as React.CSSProperties}
     >
       <DashboardSidebar
-        mobileOpen={false}
-        onMobileClose={() => {}}
+        mobileOpen={mobileOpen}
+        onMobileClose={() => setMobileOpen(false)}
         onWidthChange={handleSidebarWidthChange}
       />
 
-      <Box className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+      <Box className="workspace-main-column flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
         <TenantViewBanner />
-        <DashboardHeader />
+        <Box className="dashboard-command-wrap shrink-0">
+          <DashboardHeader onOpenMobileNav={() => setMobileOpen(true)} />
+        </Box>
         <Box
           component="main"
           className={`${mainClassName} min-h-0 flex-1 overflow-y-auto overflow-x-hidden`}

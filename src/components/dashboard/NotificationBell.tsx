@@ -51,7 +51,7 @@ export default function NotificationBell() {
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={(event) => setAnchorEl(event.currentTarget)}
-        className="theme-toggle rounded-xl"
+        className="chrome-header-action rounded-xl"
         size="small"
       >
         <Badge

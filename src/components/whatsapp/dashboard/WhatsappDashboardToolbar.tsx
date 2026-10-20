@@ -1,10 +1,8 @@
 'use client';
 
-import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import DownloadOutlinedIcon from '@mui/icons-material/DownloadOutlined';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
@@ -67,95 +65,68 @@ export default function WhatsappDashboardToolbar({
     onDateToChange(clamped.dateTo);
   }
 
-  const rangeLabel = formatWhatsappDashboardDateRangeLabel(dateFrom, dateTo);
-
   return (
-    <Box className="dashboard-hero surface-panel overflow-hidden rounded-2xl">
-      <Box className="p-6 md:p-8">
+    <Box className="surface-panel overflow-hidden rounded-xl border border-surface">
+      <Box className="px-4 py-4 md:px-5 md:py-4">
         <Stack
-          direction={{ xs: 'column', md: 'row' }}
-          spacing={3}
-          className="items-start justify-between"
+          direction={{ xs: 'column', sm: 'row' }}
+          spacing={2}
+          className="items-start justify-between gap-3 sm:items-center"
         >
-          <Box className="min-w-0 max-w-2xl">
-            <Chip
-              label="WhatsApp"
-              size="small"
-              className="h-6 rounded-lg border-0 bg-primary-soft font-semibold text-primary"
-            />
+          <Box className="min-w-0">
             <Typography
-              variant="h3"
+              variant="h4"
               component="h1"
-              className="mt-3 text-3xl font-bold tracking-tight text-foreground md:text-4xl"
+              className="text-xl font-semibold tracking-tight text-foreground md:text-[1.35rem]"
             >
-              Dashboard
+              WhatsApp dashboard
             </Typography>
-            <Typography variant="body1" color="text.secondary" className="mt-2">
-              Campaign performance, reply trends, and sender capacity in one place.
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              className="mt-0.5 max-w-xl leading-snug"
+            >
+              Campaign performance, reply trends, and sender capacity.
             </Typography>
           </Box>
 
           <Button
             variant="contained"
-            startIcon={<DownloadOutlinedIcon />}
+            size="small"
+            startIcon={<DownloadOutlinedIcon fontSize="small" />}
             onClick={onDownloadClick}
             disabled={disabled}
-            className="w-full shrink-0 rounded-2xl px-5 shadow-primary-soft md:w-auto"
+            className="w-full shrink-0 rounded-xl px-3.5 py-1.5 normal-case shadow-none sm:w-auto"
           >
             Download report
           </Button>
         </Stack>
-      </Box>
 
-      <Box
-        className="border-t border-[color:var(--surface-border)] bg-surface-muted px-6 py-4 md:px-8 md:py-5"
-        component="section"
-        aria-label="Dashboard filters"
-      >
         <Stack
-          direction={{ xs: 'column', lg: 'row' }}
-          spacing={2.5}
-          className="items-start justify-between gap-4"
+          direction={{ xs: 'column', sm: 'row' }}
+          spacing={1.5}
+          className="mt-4 items-stretch gap-3 border-t border-[color:var(--surface-border)] pt-4 sm:items-end sm:justify-end"
+          component="section"
+          aria-label="Dashboard filters"
         >
-          <Stack direction="row" spacing={1.25} className="items-center pt-0.5">
-            <Box
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-primary"
-              aria-hidden
-            >
-              <CalendarMonthOutlinedIcon fontSize="small" />
-            </Box>
-            <Box className="min-w-0">
-              <Typography variant="subtitle2" className="font-semibold leading-tight">
-                Reporting period
-              </Typography>
-              <Typography variant="body2" color="text.secondary" className="mt-0.5">
-                {rangeLabel}
-              </Typography>
-            </Box>
-          </Stack>
+          <DateRangePicker
+            id="whatsapp-dashboard-date-range"
+            label="Reporting period"
+            value={pickerValue}
+            onChange={applyDateRange}
+            formatLabel={(value) =>
+              formatWhatsappDashboardDateRangeLabel(value.from, value.to)
+            }
+            disabled={disabled}
+            className="w-full sm:max-w-[17rem]"
+          />
 
-          <Stack
-            direction={{ xs: 'column', sm: 'row' }}
-            spacing={1.5}
-            className="w-full flex-wrap items-stretch sm:items-end lg:w-auto lg:justify-end"
-          >
-            <DateRangePicker
-              id="whatsapp-dashboard-date-range"
-              value={pickerValue}
-              onChange={applyDateRange}
-              formatLabel={(value) =>
-                formatWhatsappDashboardDateRangeLabel(value.from, value.to)
-              }
-              disabled={disabled}
-            />
-
-            <WhatsappDashboardCampaignFilter
-              campaigns={campaigns}
-              value={campaignFilter}
-              onChange={onCampaignFilterChange}
-              disabled={disabled}
-            />
-          </Stack>
+          <WhatsappDashboardCampaignFilter
+            campaigns={campaigns}
+            value={campaignFilter}
+            onChange={onCampaignFilterChange}
+            disabled={disabled}
+          />
         </Stack>
       </Box>
     </Box>

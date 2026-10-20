@@ -126,8 +126,8 @@ function SidebarContent({
       <SidebarBrand isExpanded={isExpanded} orgSlug={orgSlug} />
 
       <Box
-        className={`sidebar-nav-scroll relative z-[1] min-h-0 flex-1 overflow-x-hidden overflow-y-auto pt-2 ${
-          isExpanded ? 'px-1' : 'px-0'
+        className={`sidebar-nav-scroll sidebar-nav-rail relative z-[1] min-h-0 flex-1 overflow-x-hidden overflow-y-auto pt-3 ${
+          isExpanded ? 'px-1.5' : 'px-0'
         }`}
       >
         <List disablePadding>
@@ -235,12 +235,18 @@ export default function DashboardSidebar({
         aria-label="Main navigation"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className={`sidebar-shell sidebar-transition hidden h-full shrink-0 overflow-hidden md:block ${
-          isExpanded ? 'sidebar-expanded-shadow z-20' : 'z-10'
+        className={`sidebar-aside sidebar-transition hidden h-full shrink-0 md:block ${
+          isExpanded ? 'z-20' : 'z-10'
         }`}
         sx={{ width: sidebarWidth }}
       >
-        <SidebarContent isExpanded={isExpanded} />
+        <Box
+          className={`sidebar-dock sidebar-dock-void sidebar-shell sidebar-transition h-full ${
+            isExpanded ? 'sidebar-dock-expanded' : ''
+          }`}
+        >
+          <SidebarContent isExpanded={isExpanded} />
+        </Box>
       </Box>
 
       <Drawer
@@ -259,7 +265,7 @@ export default function DashboardSidebar({
           },
         }}
       >
-        <Box className="sidebar-shell sidebar-mobile-drawer h-full">
+        <Box className="sidebar-dock sidebar-dock-void sidebar-shell sidebar-mobile-drawer h-full">
           <SidebarContent
             isExpanded
             onNavigate={onMobileClose}

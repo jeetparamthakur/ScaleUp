@@ -68,6 +68,17 @@ Shared shell classes: `.control-base`, `.control-field-input` in [`globals.css`]
 - Spacing rhythm: 4/6/8 Tailwind scale
 - Panels: 16px border-radius, 1px border, subtle shadow — no nested cards
 
+## App chrome (workspace)
+
+**Void dock + command bar** — dark floating dock (`.sidebar-dock-void`) with neon edge glow and aurora brand; main header is an intense cockpit card (`.dashboard-command-bar-intense`) with grid haze, spinning module ring, and accent stripe. Rail: 72px collapsed, 260px hover-expand.
+
+| Token / class | Role |
+|---------------|------|
+| `--chrome-sidebar-rail-bg` | Nav icon wells |
+| `--chrome-nav-active-glow` | Active rail halo |
+| `--chrome-dock-shadow` | Dock + command elevation |
+| `.chrome-header-action` | Header icon buttons |
+
 ## Components (hybrid policy)
 
 - **New forms:** use `ui/inputs` only — no new MUI `TextField` / `@mui/x-date-pickers` in touched files.

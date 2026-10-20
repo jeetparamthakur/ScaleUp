@@ -21,9 +21,12 @@ export default function SidebarFooter({ isExpanded }: SidebarFooterProps) {
     : 'Your organization workspace.';
 
   return (
-    <Box className="sidebar-footer mt-auto border-t border-surface px-3 py-4">
+    <Box className="sidebar-footer mt-auto border-t border-surface-border/80 px-3 py-4">
       {isExpanded ? (
-        <Box className="sidebar-footer-expanded rounded-2xl border border-surface bg-surface-muted px-3 py-2.5">
+        <Box
+          className="sidebar-footer-expanded rounded-2xl border border-surface-border px-3 py-2.5"
+          sx={{ background: 'var(--chrome-sidebar-rail-bg)' }}
+        >
           <Typography variant="caption" className="block font-semibold text-primary">
             {workspaceLabel}
           </Typography>
@@ -32,14 +35,8 @@ export default function SidebarFooter({ isExpanded }: SidebarFooterProps) {
           </Typography>
         </Box>
       ) : (
-        <Box className="flex flex-col items-center gap-1 text-muted">
-          <ChevronRightRoundedIcon sx={{ fontSize: 16 }} className="sidebar-footer-chevron" />
-          <Typography
-            variant="caption"
-            className="sidebar-footer-hint text-[10px] font-medium uppercase tracking-[0.14em]"
-          >
-            Expand
-          </Typography>
+        <Box className="flex flex-col items-center gap-1 text-muted" title="Hover to expand">
+          <ChevronRightRoundedIcon sx={{ fontSize: 18 }} className="sidebar-footer-chevron" aria-hidden />
         </Box>
       )}
     </Box>

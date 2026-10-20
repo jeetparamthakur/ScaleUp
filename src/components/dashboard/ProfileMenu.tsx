@@ -90,7 +90,7 @@ export default function ProfileMenu() {
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={(event) => setAnchorEl(event.currentTarget)}
-        className="theme-toggle rounded-xl p-0"
+        className="chrome-header-action rounded-xl p-0"
         size="small"
       >
         <Avatar

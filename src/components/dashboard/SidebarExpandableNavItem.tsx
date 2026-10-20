@@ -82,18 +82,18 @@ export default function SidebarExpandableNavItem({
       aria-expanded={isExpanded ? isOpen : undefined}
       aria-label={item.label}
       className={`sidebar-nav-item group relative mb-1 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
-        isParentActive && isExpanded
+        isParentActive
           ? 'sidebar-nav-item-active'
           : 'border border-transparent hover:bg-surface-muted'
       } ${
         isExpanded
           ? 'mx-2 mb-1.5 justify-start overflow-hidden rounded-2xl px-2.5 py-2'
-          : 'sidebar-nav-item-collapsed mx-0 w-full flex-col items-stretch overflow-visible px-0 py-1'
+          : 'sidebar-nav-item-collapsed mx-0 w-full flex-col items-center overflow-visible px-0 py-1'
       }`}
       sx={{
         minHeight: isExpanded ? 44 : 'auto',
         borderRadius: '1rem',
-        ...(isExpanded ? {} : { px: 0, alignItems: 'stretch' }),
+        ...(isExpanded ? {} : { px: 0, alignItems: 'center' }),
       }}
     >
       <ListItemIcon

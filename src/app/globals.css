@@ -18,6 +18,14 @@
   --sidebar-bg: #ffffff;
   --sidebar-surface: var(--sidebar-bg);
   --sidebar-border: var(--surface-border);
+  --chrome-sidebar-rail-bg: color-mix(in srgb, var(--foreground) 5%, var(--sidebar-surface));
+  --chrome-nav-active-glow: color-mix(in srgb, var(--color-primary) 22%, transparent);
+  --chrome-dock-shadow: 0 10px 40px color-mix(in srgb, var(--foreground) 9%, transparent);
+  --chrome-dock-void-bg: #0a101f;
+  --chrome-dock-void-fg: #f1f5f9;
+  --chrome-dock-void-fg-muted: #94a3b8;
+  --chrome-neon-primary: color-mix(in srgb, var(--color-primary) 65%, transparent);
+  --chrome-neon-accent: color-mix(in srgb, var(--color-accent) 45%, transparent);
   /* Overridden at runtime from NEXT_PUBLIC_BRAND_PRIMARY via theme init script */
   --header-gradient: linear-gradient(
     90deg,
@@ -116,6 +124,12 @@
   --sidebar-bg: #1e293b;
   --sidebar-surface: var(--sidebar-bg);
   --sidebar-border: var(--surface-border);
+  --chrome-sidebar-rail-bg: color-mix(in srgb, var(--foreground) 7%, var(--sidebar-surface));
+  --chrome-nav-active-glow: color-mix(in srgb, var(--color-primary) 28%, transparent);
+  --chrome-dock-shadow: 0 12px 48px color-mix(in srgb, #000000 35%, transparent);
+  --chrome-dock-void-bg: #050a14;
+  --chrome-dock-void-fg: #f8fafc;
+  --chrome-dock-void-fg-muted: #a8b4c7;
   --control-bg: var(--surface);
   --control-fg: var(--foreground);
   --control-border: var(--surface-border);
@@ -1905,15 +1919,355 @@ body {
   flex-shrink: 0;
 }
 
-.sidebar-nav-icon-idle {
-  background: color-mix(in srgb, var(--foreground) 6%, transparent);
+.workspace-shell {
+  background:
+    radial-gradient(ellipse 70% 50% at 0% 0%, var(--chrome-neon-primary), transparent 58%),
+    radial-gradient(ellipse 55% 45% at 100% 8%, color-mix(in srgb, var(--color-primary) 28%, transparent), transparent 52%),
+    var(--background);
+}
+
+.dashboard-command-wrap {
+  padding: 0.65rem 1rem 0;
+}
+
+@media (min-width: 768px) {
+  .dashboard-command-wrap {
+    padding: 0.75rem 1.25rem 0;
+  }
+}
+
+.dashboard-command-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-height: 4.75rem;
+  padding: 0.7rem 1rem 0.7rem 1.2rem;
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid var(--surface-border);
+  border-radius: 20px;
+  background: color-mix(in srgb, var(--surface) 80%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow:
+    var(--chrome-dock-shadow),
+    inset 0 1px 0 color-mix(in srgb, var(--foreground) 5%, transparent);
+}
+
+.dashboard-command-bar-intense {
+  border-color: color-mix(in srgb, var(--color-primary) 42%, transparent);
+  background: linear-gradient(
+    118deg,
+    color-mix(in srgb, var(--chrome-dock-void-bg) 94%, #000000) 0%,
+    color-mix(in srgb, var(--color-primary) 22%, var(--chrome-dock-void-bg)) 48%,
+    color-mix(in srgb, var(--chrome-dock-void-bg) 92%, #000000) 100%
+  );
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--color-primary) 18%, transparent),
+    0 16px 48px color-mix(in srgb, var(--color-primary) 22%, transparent),
+    0 4px 24px color-mix(in srgb, #000000 35%, transparent),
+    inset 0 1px 0 color-mix(in srgb, #ffffff 8%, transparent);
+}
+
+.dashboard-command-haze {
+  position: absolute;
+  top: -40%;
+  right: 8%;
+  z-index: 0;
+  width: 42%;
+  height: 180%;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at 50% 50%,
+    color-mix(in srgb, var(--color-primary) 28%, transparent),
+    transparent 68%
+  );
+  opacity: 0.45;
+}
+
+.dashboard-command-accent {
+  position: absolute;
+  z-index: 1;
+  top: 12%;
+  bottom: 12%;
+  left: 0;
+  width: 5px;
+  border-radius: 0 8px 8px 0;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--theme-primary-light) 85%, #022c22) 0%,
+    var(--color-primary) 50%,
+    color-mix(in srgb, var(--theme-primary-dark) 90%, #022c22) 100%
+  );
+  box-shadow:
+    0 0 18px var(--chrome-neon-primary),
+    0 0 28px color-mix(in srgb, var(--color-primary) 35%, transparent);
+}
+
+.dashboard-command-leading,
+.dashboard-command-actions {
+  position: relative;
+  z-index: 2;
+}
+
+.dashboard-command-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+  color: var(--foreground);
+}
+
+.dashboard-command-bar-intense .dashboard-command-title {
+  color: var(--chrome-dock-void-fg);
+}
+
+.dashboard-command-context {
+  margin-top: 0.125rem;
+  font-size: var(--type-caption-size);
+  font-weight: 500;
+  line-height: var(--type-caption-line-height);
   color: var(--color-secondary);
 }
 
+.dashboard-command-bar-intense .dashboard-command-context {
+  color: var(--chrome-dock-void-fg-muted);
+}
+
+.dashboard-module-orb-wrap {
+  position: relative;
+  width: 3.1rem;
+  height: 3.1rem;
+}
+
+.dashboard-module-orb-ring {
+  position: absolute;
+  inset: -3px;
+  border-radius: 18px;
+  background: conic-gradient(
+    from 0deg,
+    var(--theme-primary-light),
+    var(--color-primary),
+    var(--theme-primary-dark),
+    var(--color-primary)
+  );
+  opacity: 0.85;
+  animation: chrome-orb-spin 6s linear infinite;
+}
+
+.dashboard-module-orb {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 3.1rem;
+  height: 3.1rem;
+  border-radius: 16px;
+  color: #ecfdf5;
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--theme-primary-light) 45%, #022c22) 0%,
+    color-mix(in srgb, var(--color-primary) 55%, #064e3b) 100%
+  );
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #ffffff 22%, transparent),
+    0 12px 28px color-mix(in srgb, var(--color-primary) 35%, transparent);
+}
+
+@keyframes chrome-orb-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.chrome-header-action {
+  border: 1px solid var(--surface-border);
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  color: var(--color-secondary);
+  border-radius: 12px;
+}
+
+.chrome-header-action:hover {
+  background: var(--surface);
+  color: var(--foreground);
+}
+
+.dashboard-command-bar-intense .theme-toggle,
+.dashboard-command-bar-intense .chrome-header-action {
+  border-color: color-mix(in srgb, #ffffff 16%, transparent);
+  background: color-mix(in srgb, #ffffff 8%, transparent);
+  color: var(--chrome-dock-void-fg);
+}
+
+.dashboard-command-bar-intense .theme-toggle:hover,
+.dashboard-command-bar-intense .chrome-header-action:hover {
+  background: color-mix(in srgb, #ffffff 14%, transparent);
+  color: #ffffff;
+  border-color: color-mix(in srgb, var(--color-primary) 45%, transparent);
+}
+
+.dashboard-command-bar-intense .MuiAvatar-root {
+  border: 1px solid color-mix(in srgb, #ffffff 22%, transparent);
+  box-shadow: 0 0 16px var(--chrome-neon-primary);
+}
+
+.sidebar-aside {
+  box-sizing: border-box;
+  padding: 12px 0 12px 12px;
+}
+
+.sidebar-dock {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--surface-border);
+  border-radius: 22px;
+  background: color-mix(in srgb, var(--sidebar-surface) 94%, var(--background));
+  box-shadow:
+    var(--chrome-dock-shadow),
+    inset 0 1px 0 color-mix(in srgb, var(--foreground) 4%, transparent);
+}
+
+.sidebar-dock-void {
+  border-color: color-mix(in srgb, var(--color-primary) 38%, transparent);
+  background: var(--chrome-dock-void-bg);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--color-primary) 15%, transparent),
+    0 0 40px color-mix(in srgb, var(--color-primary) 18%, transparent),
+    0 20px 50px color-mix(in srgb, #000000 45%, transparent),
+    inset 0 1px 0 color-mix(in srgb, #ffffff 6%, transparent);
+}
+
+.sidebar-dock-void.sidebar-dock-expanded {
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--color-primary) 22%, transparent),
+    0 0 56px color-mix(in srgb, var(--color-primary) 28%, transparent),
+    0 0 24px color-mix(in srgb, var(--color-primary) 14%, transparent),
+    0 24px 60px color-mix(in srgb, #000000 50%, transparent);
+}
+
+.sidebar-dock-void .sidebar-nav-scroll,
+.sidebar-dock-void .sidebar-footer {
+  background: var(--chrome-dock-void-bg);
+}
+
+.sidebar-dock-void .sidebar-nav-section-label {
+  color: var(--chrome-dock-void-fg-muted);
+}
+
+.sidebar-dock-void .sidebar-nav-item {
+  color: var(--chrome-dock-void-fg-muted);
+}
+
+.sidebar-dock-void .sidebar-nav-item:hover {
+  background: color-mix(in srgb, #ffffff 6%, transparent);
+}
+
+.sidebar-dock-void .sidebar-nav-collapsed-label:not(.text-primary) {
+  color: var(--chrome-dock-void-fg-muted);
+}
+
+.sidebar-dock-void .sidebar-nav-subitem {
+  color: var(--chrome-dock-void-fg-muted);
+}
+
+.sidebar-dock-void .sidebar-nav-subitem:hover {
+  background: color-mix(in srgb, #ffffff 6%, transparent);
+}
+
+.sidebar-dock-void .sidebar-footer-expanded {
+  border-color: color-mix(in srgb, #ffffff 10%, transparent);
+  background: color-mix(in srgb, #ffffff 5%, transparent) !important;
+}
+
+.sidebar-dock-void .sidebar-footer-hint {
+  color: var(--chrome-dock-void-fg-muted);
+}
+
+.sidebar-brand-zone {
+  position: relative;
+  min-height: 5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  overflow: hidden;
+  background: #064e3b;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-primary) 35%, #022c22);
+}
+
+.sidebar-brand-mark {
+  background: color-mix(in srgb, #ffffff 16%, transparent) !important;
+  border: 1px solid color-mix(in srgb, #ffffff 22%, transparent) !important;
+  color: #ecfdf5 !important;
+  box-shadow: none !important;
+}
+
+.sidebar-nav-section-label {
+  margin: 0 0.75rem 0.5rem;
+  padding-left: 0.35rem;
+  font-size: var(--type-overline-size);
+  font-weight: var(--type-overline-weight);
+  line-height: var(--type-overline-line-height);
+  letter-spacing: var(--type-overline-letter-spacing);
+  text-transform: var(--type-overline-transform);
+  color: var(--color-secondary);
+}
+
+/* Luminous rail — fixed on the dock’s left edge, not through icon centers */
+.sidebar-nav-rail::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: 9px;
+  width: 2px;
+  border-radius: 999px;
+  pointer-events: none;
+  opacity: 0.65;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    color-mix(in srgb, var(--color-primary) 40%, transparent) 22%,
+    color-mix(in srgb, var(--theme-primary-light) 35%, transparent) 50%,
+    color-mix(in srgb, var(--color-primary) 40%, transparent) 78%,
+    transparent 100%
+  );
+}
+
+.sidebar-dock-expanded .sidebar-nav-rail::before {
+  left: 12px;
+  width: 2px;
+  opacity: 0.5;
+}
+
+.sidebar-nav-icon-idle {
+  background: var(--chrome-sidebar-rail-bg);
+  color: var(--color-secondary);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--foreground) 7%, transparent);
+}
+
+.sidebar-dock-void .sidebar-nav-icon-idle {
+  color: var(--chrome-dock-void-fg-muted);
+  background: color-mix(in srgb, #ffffff 6%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, #ffffff 8%, transparent);
+}
+
 .sidebar-nav-icon-active {
-  background-color: color-mix(in srgb, var(--color-primary) 12%, transparent);
   color: var(--color-primary);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-primary) 22%, transparent);
+  background-color: color-mix(in srgb, var(--color-primary) 16%, var(--chrome-sidebar-rail-bg));
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--color-primary) 30%, transparent),
+    0 0 0 4px var(--chrome-nav-active-glow);
+  transform: scale(1.04);
+}
+
+.sidebar-dock-void .sidebar-nav-icon-active {
+  color: #ecfdf5;
+  background-color: color-mix(in srgb, var(--color-primary) 45%, #022c22);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--color-primary) 55%, transparent),
+    0 0 0 4px var(--chrome-nav-active-glow),
+    0 0 22px var(--chrome-neon-primary);
+  transform: scale(1.08);
 }
 
 .sidebar-transition {
@@ -1928,19 +2282,12 @@ body {
 
 .sidebar-shell {
   position: relative;
-  background: var(--sidebar-surface);
+  background: transparent;
   border-right: none;
 }
 
-.sidebar-shell::after {
-  content: '';
-  position: absolute;
-  top: var(--platform-chrome-height);
-  right: 0;
-  bottom: 0;
-  width: 1px;
-  background: var(--sidebar-border);
-  pointer-events: none;
+.sidebar-dock .sidebar-shell::after {
+  content: none;
 }
 
 .sidebar-shell .platform-chrome-row::after {
@@ -1986,6 +2333,22 @@ body {
   border-color: transparent;
 }
 
+.sidebar-nav-item-collapsed.sidebar-nav-item-active .sidebar-nav-icon-active {
+  transform: scale(1.08);
+}
+
+.sidebar-nav-item-collapsed {
+  align-items: center !important;
+}
+
+.sidebar-nav-item-collapsed .MuiListItemIcon-root {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  justify-content: center;
+  margin-right: 0 !important;
+}
+
 .sidebar-nav-collapsed-label-wrap {
   display: flex;
   width: 100%;
@@ -2027,7 +2390,16 @@ body {
 }
 
 .sidebar-footer-chevron {
-  animation: sidebar-chevron-nudge 1.8s ease-in-out infinite;
+  animation: sidebar-chevron-nudge 2.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar-footer-chevron,
+  .sidebar-nav-icon-active,
+  .dashboard-module-orb-ring {
+    animation: none;
+    transform: none;
+  }
 }
 
 .sidebar-footer-hint {

@@ -262,6 +262,54 @@ export const workspaceSettingsNavItem: NavItem = {
 /** @deprecated Use workspaceSettingsNavItem — settings lives in the header, not the sidebar. */
 export const workspaceBottomNavItems: NavItem[] = [workspaceSettingsNavItem];
 
+export function getActiveWorkspaceModuleLabel(
+  pathname: string,
+  orgSlug: string,
+  navItems: NavItem[],
+): string | null {
+  for (const item of navItems) {
+    if (isActiveRoute(pathname, item.href, orgSlug)) {
+      return item.label;
+    }
+
+    if (
+      item.children?.some((child) => isActiveRoute(pathname, child.href, orgSlug))
+    ) {
+      return item.label;
+    }
+  }
+
+  if (isActiveRoute(pathname, workspaceSettingsNavItem.href, orgSlug)) {
+    return workspaceSettingsNavItem.label;
+  }
+
+  return null;
+}
+
+export function getActiveWorkspaceModuleItem(
+  pathname: string,
+  orgSlug: string,
+  navItems: NavItem[],
+): NavItem | null {
+  for (const item of navItems) {
+    if (isActiveRoute(pathname, item.href, orgSlug)) {
+      return item;
+    }
+
+    if (
+      item.children?.some((child) => isActiveRoute(pathname, child.href, orgSlug))
+    ) {
+      return item;
+    }
+  }
+
+  if (isActiveRoute(pathname, workspaceSettingsNavItem.href, orgSlug)) {
+    return workspaceSettingsNavItem;
+  }
+
+  return null;
+}
+
 export function getPageTitle(pathname: string): string {
   const orgSlug = getOrgSlugFromPathname(pathname);
   const relativePath = orgSlug ? stripOrgPrefix(pathname, orgSlug) : pathname;

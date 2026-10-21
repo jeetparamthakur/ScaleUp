@@ -1,8 +1,5 @@
 import type { NextConfig } from 'next';
 
-const backendUrl =
-  process.env.MARKOS_BACKEND_INTERNAL_URL ?? 'http://localhost:3008';
-
 const nextConfig: NextConfig = {
   experimental: {
     // Video media is fetched on demand from OpenWA and can take >30s.
@@ -34,14 +31,6 @@ const nextConfig: NextConfig = {
         source: '/:orgSlug/email/excluded',
         destination: '/:orgSlug/email/lists?tab=excluded',
         permanent: false,
-      },
-    ];
-  },
-  async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: `${backendUrl}/:path*`,
       },
     ];
   },
